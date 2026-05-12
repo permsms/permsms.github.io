@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Базовые настройки и цвета (Военная тематика) --- */
+        :root {
+            --bg-dark: #1a222c;
+            --bg-main: #0f171f;
+            --text-light: #e0e0e0;
+            --accent-gold: #d4af37;
+            --accent-green: #669966;
+            --border-camo: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-light); /* Белый цвет текста */
+            line-height: 1.7;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- Шапка (Header) --- */
+        header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(var(--bg-dark), 0.95);
+            backdrop-filter: blur(5px);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--accent-gold);
+        }
+        nav ul {
+            display: flex;
+            gap: 35px;
+        }
+        nav a {
+            font-weight: 500;
+            font-size: 16px;
+            transition: color .3s ease;
+        }
+        nav a.active, nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* --- Секции (Full-screen) --- */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px;
+            position: relative;
+        }
+
+        /* --- Анимация появления при скролле --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Стили для текста и ссылок --- */
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 80px;
+            color: var(--accent-gold);
+        }
+
+        .section-text p {
+            font-size: 18px;
+            max-width: 750px;
+            margin-bottom: 60px;
+            line-height: 1.8;
+        }
+        .section-text p:last-child {
+            margin-bottom: 60px;
+        }
+
+        .link-more {
+            display: inline-block;
+            background-color: var(--accent-gold);
+            color: var(--bg-dark);
+            padding: 12px 35px;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .link-more:focus,
+        .link-more:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255,75,75,0.4);
+        }
+        .link-more:hover {
+            transform: translateY(-1px);
+        }
+
+        /* --- Фоновые изображения для секций --- */
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://psvu.mil.ru/upload/site62/document_video/CYDZwVgAyG_d1.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        #life::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1648999879779-7f8e8b4c9b6e?q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        #future::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1637743673737-7a3b6d7b6a8c?w=1920');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        /* --- Карточки (улучшенные описания) --- */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 35px;
+            max-width: 1200px;
+            margin-bottom: 60px;
+        }
+        .card {
+            background-color: #2a333e;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            transition: .3s ease-in-out;
+            min-height: 400px;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(255,255,255,.15);
+        }
+        .card h3 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: var(--accent-gold);
+        }
+        .card p {
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        /* === ВАЖНЫЕ СТИЛИ ДЛЯ РАСКРЫВАЕМЫХ КАРТОЧЕК === */
+        /* Дополнительный текст скрыт по умолчанию */
+        .card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 20px;
+        }
+        /* Открытая карточка показывает весь текст */
+        .card.opened .card-details {
+            max-height: 500px;
+        }
+
+        /* Подсветка активной карточки */
+        .card.opened {
+            background-color: var(--accent-green); /* Зелёный фон при открытии */
+            color: #000; /* Чёрный текст на зеленом фоне */
+        }
+
+        /* --- Подвал (Footer) --- */
+        footer {
+            background-color: var(--bg-dark);
+            color: #ccc;
+            text-align: center;
+            padding: 35px;
+        }
+        footer p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-text">ПСВУ</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#hero" class="active">Главная</a></li>
+                <li><a href="#life">Жизнь училища</a></li>
+                <li><a href="#future">Поступление</a></li>
+                <li><a href="#about">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Секция Hero (Главная) -->
+    <section id="hero">
+        <div class="container animate-on-scroll">
+            <div class="text-bg" style="background-color:#0f171fcc; padding:45px; border-radius:12px;">
+                <h1 class="section-title">Будущее начинается здесь</h1>
+                <p class="section-text">Пермское суворовское военное училище — это не просто учёба. Это воспитание характера, дисциплина и подготовка настоящих защитников Отечества.</p>
+                <div style="height: 40px"></div>
+                <a href="#about" class="link-more">Узнать больше</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция Жизнь училища с подробными описаниями -->
+    <section id="life">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Жизнь в ПСВУ</h2>
+            <div class="cards-container">
+                <!-- Первая карточка с раскрытием -->
+                <div class="card animate-on-scroll" onclick="toggleCard(this)">
+                    <h3>Дисциплина и честь</h3>
+                    <p>Воспитанники живут по строгому распорядку дня, осваивая принципы чести, дисциплины и взаимопомощи.</p>
+                    
+                    <!-- Дополнительный текст (скрыт по умолчанию) -->
+                    <div class="card-details">
+                        <p>Ежедневная утренняя зарядка, строевая подготовка, вечерние построения и обязательное участие в патриотическом воспитании формируют сильный характер каждого курсанта.</p>
+                        <p>Особое внимание уделяется изучению военной истории, традиций Вооружённых Сил и развитию чувства долга перед Родиной.</p>
+                    </div>
+                </div>
+
+                <!-- Вторая карточка с раскрытием -->
+                <div class="card animate-on-scroll" onclick="toggleCard(this)">
+                    <h3>Современное образование</h3>
+                    <p>Училище оснащено современными компьютерными классами, научными лабораториями и специализированными аудиториями.</p>
+                    
+                    <!-- Дополнительный текст (скрыт по умолчанию) -->
+                    <div class="card-details">
+                        <p>Преподаватели применяют инновационные методики обучения, включая дистанционное обучение и электронные учебники.</p>
+                        <p>Особое внимание уделяется проектной деятельности: курсанты выполняют собственные научно-исследовательские работы и участвуют в олимпиадах федерального уровня.</p>
+                    </div>
+                </div>
+
+                <!-- Третья карточка с раскрытием -->
+                <div class="card animate-on-scroll" onclick="toggleCard(this)">
+                    <h3>Физическая подготовка</h3>
+                    <p>Ежедневные физические нагрузки, занятия спортом и соревнования развивают выносливость, силу воли и уверенность в себе.</p>
+                    
+                    <!-- Дополнительный текст (скрыт по умолчанию) -->
+                    <div class="card-details">
+                        <p>Курсанты занимаются лёгкой атлетикой, гимнастикой, рукопашным боем и спортивным ориентированием.</p>
+                        <p>Лучшие спортсмены получают возможность выступать за сборную училища на соревнованиях регионального и всероссийского уровней.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция Поступление с подробными описаниями -->
+    <section id="future">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Твой путь к карьере офицера</h2>
+            <div class="cards-container">
+                <!-- Первая карточка с раскрытием -->
+                <div class="card animate-on-scroll" onclick="toggleCard(this)">
+                    <h3>Требования к кандидатам</h3>
+                    <p>Набор проводится среди юношей в возрасте 10–11 лет после завершения начальной школы.</p>
+                    
+                    <!-- Дополнительный текст (скрыт по умолчанию) -->
+                    <div class="card-details">
+                        <p>Возраст кандидатов — от 10 до 11 лет. Необходимо пройти медицинское обследование, сдать нормы физической подготовки и успешно пройти собеседование.</p>
+                        <p>Документы принимаются с февраля по май ежегодно.</p>
+                    </div>
+                </div>
+
+                <!-- Вторая карточка с раскрытием -->
+                <div class="card animate-on-scroll" onclick="toggleCard(this)">
+                    <h3>Преимущества выпускников</h3>
+                    <p>Выпускники получают льготы при поступлении в престижные военные академии и университеты Министерства обороны.</p>
+                    
+                    <!-- Дополнительный текст (скрыт по умолчанию) -->
+                    <div class="card-details">
+                        <p>Более 90% выпускников поступают в высшие военные учебные заведения без экзаменов благодаря высоким оценкам и рекомендациям училища.</p>
+                        <p>Многие становятся командирами взводов и рот, занимают руководящие должности в армии и силовых ведомствах.</p>
+                    </div>
+                </div>
+
+                <!-- Третья карточка с раскрытием -->
+                <div class="card animate-on-scroll" onclick="toggleCard(this)">
+                    <h3>Педагогический состав</h3>
+                    <p>Занятия проводят высококвалифицированные офицеры и преподаватели с большим стажем работы.</p>
+                    
+                    <!-- Дополнительный текст (скрыт по умолчанию) -->
+                    <div class="card-details">
+                        <p>Средний педагогический стаж преподавателей превышает 15 лет. Многие из них являются ветеранами боевых действий и участниками крупных учений.</p>
+                        <p>Регулярно проводятся мастер-классы и лекции приглашённых экспертов Минобороны и вузов-партнёров.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция О нас -->
+    <section id="about">
+        <div class="container animate-on-scroll">
+            <h2 class="section-title">О нас</h2>
+            <div class="about-text">
+                <p><strong>Пермское суворовское военное училище (ПСВУ)</strong> — ведущий федеральный военный образовательный центр Пермского края, осуществляющий подготовку будущих военнослужащих и лидеров нового поколения.</p>
+                <p>Наше училище готовит молодых людей не только к военной службе, но и формирует крепкий характер, ответственность и стремление к самосовершенствованию. Мы предоставляем качественные знания и навыки, необходимые для успешного прохождения службы и дальнейшей карьеры.</p>
+                <p>Мы гордимся нашей историей и традициями, а наши выпускники продолжают прославлять училище, занимая достойные должности в рядах Вооружённых Сил и силовых ведомств.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал (Footer) -->
+    <footer>
+        <p>© Пермское суворовское военное училище. Все права защищены.</p>
+        <p>Официальный адрес:</p>
+        <p style="font-weight: bold;">614575, Россия, Пермский край, пгт Звездный, ул. Ленина, 15</p>
+    </footer>
+
+    <!-- Скрипт для анимации при скролле -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Функция для переключения состояния карточки (открыта/закрыта)
+        function toggleCard(card) {
+            card.classList.toggle('opened'); // Переключаем класс opened
+        }
+    </script>
+</body>
+</html>
